@@ -1,13 +1,14 @@
 # Copyright (C) 2018-2020 L-WRT Team
-# Copyright (C) 2021-2023 xiaorouji
+# Copyright (C) 2021-2025 xiaorouji
+# Copyright (C) 2026 Openwrt-Passwall Organization
 #
 # This is free software, licensed under the GNU General Public License v3.
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-passwall
-PKG_VERSION:=4.78-3
-PKG_RELEASE:=
+PKG_VERSION:=26.9.9
+PKG_RELEASE:=1
 
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_$(PKG_NAME)_INCLUDE_Haproxy \
@@ -15,34 +16,33 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_PACKAGE_$(PKG_NAME)_INCLUDE_NaiveProxy \
 	CONFIG_PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks_Rust_Client \
 	CONFIG_PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks_Rust_Server \
+	CONFIG_PACKAGE_$(PKG_NAME)_INCLUDE_Shadow_TLS \
 	CONFIG_PACKAGE_$(PKG_NAME)_INCLUDE_Simple_Obfs \
 	CONFIG_PACKAGE_$(PKG_NAME)_INCLUDE_SingBox \
-	CONFIG_PACKAGE_$(PKG_NAME)_INCLUDE_Trojan_Plus \
-	CONFIG_PACKAGE_$(PKG_NAME)_INCLUDE_tuic_client \
 	CONFIG_PACKAGE_$(PKG_NAME)_INCLUDE_V2ray_Geodata \
+	CONFIG_PACKAGE_$(PKG_NAME)_INCLUDE_V2ray_Geoview \
 	CONFIG_PACKAGE_$(PKG_NAME)_INCLUDE_V2ray_Plugin \
 	CONFIG_PACKAGE_$(PKG_NAME)_INCLUDE_Xray \
 	CONFIG_PACKAGE_$(PKG_NAME)_INCLUDE_Xray_Plugin
 
 LUCI_TITLE:=LuCI support for PassWall
 LUCI_PKGARCH:=all
-LUCI_DEPENDS:=+coreutils +coreutils-base64 +coreutils-nohup +curl \
-	+chinadns-ng +dns2socks +dns2tcp +ip-full +libuci-lua +lua +luci-compat +luci-lib-jsonc \
-	+microsocks +resolveip +tcping +unzip +ipt2socks \
-	+kmod-nft-socket +kmod-nft-tproxy +kmod-nft-nat \
+LUCI_DEPENDS:=+coreutils +coreutils-base64 +coreutils-nohup +coreutils-timeout +curl \
+	+chinadns-ng +dns2socks +ip-full +libuci-lua +lua +luci-compat +luci-lib-jsonc \
+	+microsocks +resolveip +tcping +lyaml +unzip +ipt2socks \
+	+kmod-nft-socket +kmod-nft-tproxy +kmod-nft-nat +kmod-nf-reject +kmod-nf-reject6 \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Brook:brook \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Haproxy:haproxy \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Hysteria:hysteria \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_NaiveProxy:naiveproxy \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks_Rust_Client:shadowsocks-rust-sslocal \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks_Rust_Server:shadowsocks-rust-ssserver \
-	+PACKAGE_$(PKG_NAME)_INCLUDE_Simple_Obfs:simple-obfs \
+	+PACKAGE_$(PKG_NAME)_INCLUDE_Shadow_TLS:shadow-tls \
+	+PACKAGE_$(PKG_NAME)_INCLUDE_Simple_Obfs:simple-obfs-client \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_SingBox:sing-box \
-	+PACKAGE_$(PKG_NAME)_INCLUDE_Trojan_GO:trojan-go \
-	+PACKAGE_$(PKG_NAME)_INCLUDE_Trojan_Plus:trojan-plus \
-	+PACKAGE_$(PKG_NAME)_INCLUDE_tuic_client:tuic-client \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_V2ray_Geodata:v2ray-geoip \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_V2ray_Geodata:v2ray-geosite \
+	+PACKAGE_$(PKG_NAME)_INCLUDE_V2ray_Geoview:geoview \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_V2ray_Plugin:v2ray-plugin \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Xray:xray-core \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Xray_Plugin:xray-plugin
@@ -61,18 +61,23 @@ config PACKAGE_$(PKG_NAME)_INCLUDE_Hysteria
 
 config PACKAGE_$(PKG_NAME)_INCLUDE_NaiveProxy
 	bool "Include NaiveProxy"
-	depends on !(arc||(arm&&TARGET_gemini)||armeb||mips||mips64||powerpc)
+	depends on !(arc||armeb||loongarch64||mips||mips64||powerpc||TARGET_gemini)
 	default n
 
 config PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks_Rust_Client
 	bool "Include Shadowsocks Rust Client"
-	depends on aarch64||arm||i386||mips||mipsel||x86_64
+	depends on !i386
 	default y
 
 config PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks_Rust_Server
 	bool "Include Shadowsocks Rust Server"
-	depends on aarch64||arm||i386||mips||mipsel||x86_64
-	default y if aarch64||arm||i386||x86_64
+	depends on !i386
+	default y if aarch64||arm||x86_64
+
+config PACKAGE_$(PKG_NAME)_INCLUDE_Shadow_TLS
+	bool "Include Shadow-TLS"
+	depends on aarch64||arm||x86_64
+	default n
 
 config PACKAGE_$(PKG_NAME)_INCLUDE_Simple_Obfs
 	bool "Include Simple-Obfs (Shadowsocks Plugin)"
@@ -82,18 +87,13 @@ config PACKAGE_$(PKG_NAME)_INCLUDE_SingBox
 	bool "Include Sing-Box"
 	default y if aarch64||arm||i386||x86_64
 
-config PACKAGE_$(PKG_NAME)_INCLUDE_Trojan_Plus
-	bool "Include Trojan-Plus"
-	default y
-
-config PACKAGE_$(PKG_NAME)_INCLUDE_tuic_client
-	bool "Include tuic-client"
-	depends on aarch64||arm||i386||x86_64
-	default n
-
 config PACKAGE_$(PKG_NAME)_INCLUDE_V2ray_Geodata
 	bool "Include V2ray_Geodata"
 	default n
+
+config PACKAGE_$(PKG_NAME)_INCLUDE_V2ray_Geoview
+	bool "Include V2ray_Geoview"
+	default y if aarch64||arm||i386||x86_64
 
 config PACKAGE_$(PKG_NAME)_INCLUDE_V2ray_Plugin
 	bool "Include V2ray-Plugin (Shadowsocks Plugin)"
@@ -122,7 +122,20 @@ define Package/$(PKG_NAME)/conffiles
 /usr/share/passwall/rules/lanlist_ipv4
 /usr/share/passwall/rules/lanlist_ipv6
 /usr/share/passwall/rules/domains_excluded
-/www/luci-static/resources/qrcode.min.js
+endef
+
+define Package/$(PKG_NAME)/postinst
+#!/bin/sh
+rm -f $${IPKG_INSTROOT}/usr/share/passwall/rules/*.nft
+rm -rf $${IPKG_INSTROOT}/tmp/etc/passwall_tmp
+exit 0
+endef
+
+define Package/$(PKG_NAME)/postrm
+#!/bin/sh
+rm -f $${IPKG_INSTROOT}/usr/share/passwall/rules/*.nft
+rm -rf $${IPKG_INSTROOT}/tmp/etc/passwall_tmp
+exit 0
 endef
 
 include ../../luci.mk

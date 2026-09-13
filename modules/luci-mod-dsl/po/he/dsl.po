@@ -248,7 +248,7 @@ msgstr ""
 
 #: modules/luci-mod-dsl/htdocs/luci-static/resources/view/status/dsl/spectrum.js:45
 msgid ""
-"The graph shows th amount of bits actually allocated per subcarrier in the "
+"The graph shows the amount of bits actually allocated per subcarrier in the "
 "uplink and downlink direction"
 msgstr ""
 
@@ -276,6 +276,10 @@ msgstr ""
 
 #: modules/luci-mod-dsl/htdocs/luci-static/resources/view/status/dsl/graph.js:154
 msgid "Upstream SNR"
+msgstr ""
+
+#: modules/luci-mod-dsl/htdocs/luci-static/resources/view/status/dsl/graph.js:118
+msgid "Upstream bits allocation"
 msgstr ""
 
 #: modules/luci-mod-dsl/htdocs/luci-static/resources/view/status/dsl/graph.js:112

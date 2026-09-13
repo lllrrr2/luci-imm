@@ -16,10 +16,10 @@ return view.extend({
 	},
 
 	handleEnableSQM: rpc.declare({
-		object: 'luci',
-		method: 'setInitAction',
-		params: [ 'sqm', 'enable' ],
-		expect: { result: false }
+		object: 'rc',
+		method: 'init',
+		params: [ 'name', 'action' ],
+		reject: true
 	}),
 
 	load: function() {
@@ -49,17 +49,19 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button-active',
 					'click': ui.createHandlerFn(this, function() {
-						return fs.exec('/etc/init.d/sqm', ['enable']).then(function() {
-							return fs.exec('/etc/init.d/sqm', ['start']);
-						}).then(function() {
+						return this.handleEnableSQM('sqm', 'enable').then(L.bind(function() {
+							return this.handleEnableSQM('sqm', 'start');
+						}, this)).then(function() {
 							location.reload();
+						}).catch(function(err) {
+							ui.addNotification(null, E('p', _("Failed to enable the sqm initscript: %s").format(err.message)), 'error');
 						});
 					})
 				}, _('Enable SQM'))
 			]));
 		}
 
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('sqm', _('Smart Queue Management'));
 		m.description = _("With <abbr title=\"Smart Queue Management\">SQM</abbr> you " +
@@ -79,8 +81,11 @@ return view.extend({
 		o.rmempty = false;
 		o.write = L.bind(function(section, value) {
 			if (value == "1") {
-				this.handleEnableSQM();
-				ui.addNotification(null, E('p', _("The SQM GUI has just enabled the sqm initscript on your behalf. Remember to disable the sqm initscript manually under System Startup menu in case this change was not wished for.")));
+				this.handleEnableSQM('sqm', 'enable').then(function() {
+					ui.addNotification(null, E('p', _("The SQM GUI has just enabled the sqm initscript on your behalf. Remember to disable the sqm initscript manually under System Startup menu in case this change was not wished for.")));
+				}).catch(function(err) {
+					ui.addNotification(null, E('p', _("Failed to enable the sqm initscript: %s").format(err.message)), 'error');
+				});
 			}
 
 			return uci.set("sqm", section, "enabled", value);
@@ -89,7 +94,7 @@ return view.extend({
 		o = s.taboption("tab_basic", widgets.DeviceSelect, "interface", _("Interface name"));
 		o.rmempty = false;
 
-		o = s.taboption("tab_basic", form.Value, "download", _("Download speed (ingress)"), _("Download speed (kbit/s) (ingress) set to 0 to selectively disable ingress shaping"));
+		o = s.taboption("tab_basic", form.Value, "download", _("Download speed (ingress)"), _("Download speed (kbit/s) (ingress) set to 0 to disable ingress shaping selectively"));
 		o.datatype = "and(uinteger,min(0))";
 		o.rmempty = false;
 
@@ -132,6 +137,10 @@ return view.extend({
 
 		o = s.taboption("tab_qdisc", form.Flag, "qdisc_advanced", _("Advanced Configuration"), _("Advanced options will only be used as long as this box is checked."));
 		o.default = false;
+
+		o = s.taboption("tab_qdisc", form.Flag, "use_mq", _("Enable multi-queue config"), _("Enable multi-queue qdisc on supported hardware. If .qos script does not support mq this option is ignored."));
+		o.default = false;
+		o.depends("qdisc_advanced", "1");
 
 		o = s.taboption("tab_qdisc", form.ListValue, "squash_dscp", _("Squash DSCP (ingress)"), _("Squash DSCP markings on inbound packets"));
 		o.value("1", "SQUASH");

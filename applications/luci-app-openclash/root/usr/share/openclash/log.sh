@@ -6,18 +6,45 @@ LOG_FILE="/tmp/openclash.log"
 LOG_OUT()
 {
 	if [ -n "${1}" ]; then
-		echo -e "${1}" > $START_LOG
-		echo -e "$(date "+%Y-%m-%d %H:%M:%S") ${1}" >> $LOG_FILE
+		echo -e "$(date "+%Y-%m-%d %H:%M:%S") [Info] ${1}" >> $START_LOG
+		echo -e "$(date "+%Y-%m-%d %H:%M:%S") [Info] ${1}" >> $LOG_FILE
 	fi
 }
 
-LOG_ALERT()
+LOG_TIP()
 {
-	echo -e "$(tail -n 20 $LOG_FILE |grep -E 'level=fatal|level=error|FTL\ \[Config\]' |awk 'END {print}')" > $START_LOG
-	sleep 3
+	if [ -n "${1}" ]; then
+		echo -e "$(date "+%Y-%m-%d %H:%M:%S") [Tip] ${1}" >> $START_LOG
+		echo -e "$(date "+%Y-%m-%d %H:%M:%S") [Tip] ${1}" >> $LOG_FILE
+	fi
 }
 
-SLOG_CLEAN()
+LOG_WARN()
 {
-	echo "" > $START_LOG
+	if [ -n "${1}" ]; then
+		echo -e "$(date "+%Y-%m-%d %H:%M:%S") [Warning] ${1}" >> $START_LOG
+		echo -e "$(date "+%Y-%m-%d %H:%M:%S") [Warning] ${1}" >> $LOG_FILE
+	fi
+}
+
+LOG_ERROR()
+{
+	if [ -n "${1}" ]; then
+		echo -e "$(date "+%Y-%m-%d %H:%M:%S") [Error] ${1}" >> $START_LOG
+		echo -e "$(date "+%Y-%m-%d %H:%M:%S") [Error] ${1}" >> $LOG_FILE
+	fi
+}
+
+LOG_INFO()
+{
+	if [ -n "${1}" ]; then
+		echo -e "$(date "+%Y-%m-%d %H:%M:%S") [Info] ${1}" >> $LOG_FILE
+	fi
+}
+
+LOG_WATCHDOG()
+{
+	if [ -n "${1}" ]; then
+		echo -e "$(date "+%Y-%m-%d %H:%M:%S") [Watchdog] ${1}" >> $LOG_FILE
+	fi
 }

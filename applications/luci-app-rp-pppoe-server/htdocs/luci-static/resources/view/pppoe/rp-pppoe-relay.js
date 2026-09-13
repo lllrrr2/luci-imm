@@ -12,7 +12,7 @@ return view.extend({
 	},
 
 	render: function (loaded_promises) {
-		var m, s, o;
+		let m, s, o;
 		const networks = loaded_promises[0];
 
 		m = new form.Map('pppoe', _('Roaring Penguin PPPoE Relay'),
@@ -24,21 +24,21 @@ return view.extend({
 
 		o = s.option(form.Flag, 'enabled', _('Enabled'));
 
-		o = s.option(widgets.DeviceSelect, 'server_interface', _('Server Interface'), _('Interface on which to listen. Only PPPoE servers may be connected to this interface.'));
+		o = s.option(widgets.NetworkSelect, 'server_interface', _('Server Interface'), _('Interface on which to listen. Only PPPoE servers may be connected to this interface.'));
 		o.multiple = true;
 		o.optional = true;
 		o.nocreate = true;
 		o.rmempty = true;
 		o.depends({ enabled: '1' });
 
-		o = s.option(widgets.DeviceSelect, 'client_interface', _('Client Interface'), _('Interface from which to relay. Only PPPoE clients may be connected to this interface.'));
+		o = s.option(widgets.NetworkSelect, 'client_interface', _('Client Interface'), _('Interface from which to relay. Only PPPoE clients may be connected to this interface.'));
 		o.multiple = true;
 		o.optional = true;
 		o.nocreate = true;
 		o.rmempty = true;
 		o.depends({ enabled: '1' });
 
-		o = s.option(widgets.DeviceSelect, 'both_interface', _('Both Interface'), _('Interface upon which to listen and to relay. Both PPPoE clients and servers may be connected to this interface.'));
+		o = s.option(widgets.NetworkSelect, 'both_interface', _('Both Interface'), _('Interface upon which to listen and to relay. Both PPPoE clients and servers may be connected to this interface.'));
 		o.multiple = true;
 		o.optional = true;
 		o.nocreate = true;

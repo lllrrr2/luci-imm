@@ -5,14 +5,13 @@
 
 return view.extend({
 	render: function() {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('bcp38', _('BCP38'),
 			_('This function blocks packets with private address destinations ' +
-			'from going out onto the internet as per ' +
-			'<a href="http://tools.ietf.org/html/bcp38">BCP 38</a>. ' +
-			'For IPv6, only source specific default routes are installed, so ' +
-			'no BCP38 firewall routes are needed.'));
+			'from going out onto the internet as per %s'.format('<a href="http://tools.ietf.org/html/bcp38">BCP 38</a>') + '<br/>' +
+			_('For IPv6, only source specific default routes are installed, so ' +
+			'no BCP38 firewall routes are needed.')));
 
 
 		s = m.section(form.TypedSection, 'bcp38', _('BCP38 config'));
@@ -23,13 +22,13 @@ return view.extend({
 		o.rmempty = false;
 
 		o = s.option(form.Flag, 'detect_upstream', _('Auto-detect upstream IP'), 
-			_('Attempt to automatically detect if the upstream IP ' +
-			'will be blocked by the configuration, and add an exception if it will. ' +
+			_('Automatically attempt to detect whether the upstream IP ' +
+			'will be blocked by the configuration, adding an exception if so. ' +
 			'If this does not work correctly, you can add exceptions manually below.')); 
 		o.rmempty = false;
 
 		o = s.option(widgets.DeviceSelect, 'interface', _('Interface name'),
-			_('Interface to apply the blocking to should be the upstream WAN interface).'));
+			_('Interface to apply the blocking to (should be the upstream WAN interface).'));
 		o.modalonly = true;
 		o.noaliases = true;
 		o.multiple = false;

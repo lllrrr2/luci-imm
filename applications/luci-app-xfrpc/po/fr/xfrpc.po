@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-02-01 22:49+0000\n"
-"Last-Translator: ButterflyOfFire <boffire@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2025-12-12 15:41+0000\n"
+"Last-Translator: liolio6 <fliolio@free.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsxfrpc/fr/>\n"
 "Language: fr\n"
@@ -10,23 +10,23 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 
 #: applications/luci-app-xfrpc/htdocs/luci-static/resources/view/xfrpc.js:104
 msgid "Alert"
-msgstr ""
+msgstr "Alerte"
 
 #: applications/luci-app-xfrpc/htdocs/luci-static/resources/view/xfrpc.js:82
 msgid "By default, this value is \"\"."
-msgstr ""
+msgstr "Valeur par défaut \"\"."
 
 #: applications/luci-app-xfrpc/htdocs/luci-static/resources/view/xfrpc.js:71
 msgid "By default, this value is \"0.0.0.0\"."
-msgstr ""
+msgstr "Par défaut, cette valeur est \"0.0.0.0\"."
 
 #: applications/luci-app-xfrpc/htdocs/luci-static/resources/view/xfrpc.js:97
 msgid "By default, this value is \"Info\"."
-msgstr ""
+msgstr "Par défaut, cette valeur vaut \"Info\"."
 
 #: applications/luci-app-xfrpc/htdocs/luci-static/resources/view/xfrpc.js:129
 msgid "By default, this value is \"tcp\"."
@@ -38,7 +38,7 @@ msgstr ""
 
 #: applications/luci-app-xfrpc/htdocs/luci-static/resources/view/xfrpc.js:58
 msgid "Collecting data ..."
-msgstr ""
+msgstr "Récolte de données..."
 
 #: applications/luci-app-xfrpc/htdocs/luci-static/resources/view/xfrpc.js:66
 msgid "Common Settings"
@@ -54,7 +54,7 @@ msgstr ""
 
 #: applications/luci-app-xfrpc/htdocs/luci-static/resources/view/xfrpc.js:98
 msgid "Debug"
-msgstr ""
+msgstr "Débug"
 
 #: applications/luci-app-xfrpc/htdocs/luci-static/resources/view/xfrpc.js:90
 msgid "Disabled xfrpc service"
@@ -146,7 +146,7 @@ msgstr ""
 
 #: applications/luci-app-xfrpc/htdocs/luci-static/resources/view/xfrpc.js:30
 msgid "RUNNING"
-msgstr ""
+msgstr "EXÉCUTION"
 
 #: applications/luci-app-xfrpc/htdocs/luci-static/resources/view/xfrpc.js:146
 msgid "Remote port"

@@ -21,13 +21,14 @@ LUCI_DEPENDS:=\
 	+cgi-io \
 	+ucode \
 	+ucode-mod-fs \
+	+ucode-mod-log \
 	+ucode-mod-uci \
 	+ucode-mod-ubus \
-	+ucode-mod-math \
 	+ucode-mod-html \
 	+liblucihttp-ucode
 
 PKG_LICENSE:=Apache-2.0
+PKG_LICENSE_FILES:=LICENSE NOTICE
 
 HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)
 
@@ -50,6 +51,11 @@ if [ -z "$${PKG_INSTROOT}" ] && [ -f /etc/config/uhttpd ]; then
 fi
 
 exit 0
+endef
+
+define Build/Prepare/luci-base
+	$(CP) ../../NOTICE $(PKG_BUILD_DIR)
+	$(CP) ../../LICENSE $(PKG_BUILD_DIR)
 endef
 
 include ../../luci.mk

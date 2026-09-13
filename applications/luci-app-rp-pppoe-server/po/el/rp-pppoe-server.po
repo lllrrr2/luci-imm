@@ -167,7 +167,7 @@ msgstr ""
 msgid "PPPoE Server Configuration"
 msgstr ""
 
-#: applications/luci-app-rp-pppoe-server/root/usr/share/luci/menu.d/luci-app-rp-pppoe-server.json:14
+#: applications/luci-app-rp-pppoe-server/root/usr/share/luci/menu.d/luci-app-rp-pppoe-server.json:13
 msgid "RP PPPoE Relay"
 msgstr ""
 
@@ -212,7 +212,7 @@ msgid "Synchronous PPP encapsulation"
 msgstr ""
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:89
-msgid "Tells the PPPoE server to randomly permute session numbers."
+msgid "Tells the PPPoE server to permute session numbers randomly."
 msgstr ""
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:61

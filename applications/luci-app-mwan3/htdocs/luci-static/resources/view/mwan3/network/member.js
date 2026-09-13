@@ -12,7 +12,7 @@ return view.extend({
 	},
 
 	render: function () {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('mwan3', _('MultiWAN Manager - Members'),
 			_('Members are profiles attaching a metric and weight to an MWAN interface.') + '<br />' +
@@ -58,7 +58,7 @@ return view.extend({
 			_('Acceptable values: 1-256. Defaults to 1 if not set'));
 		o.datatype = 'range(1, 256)';
 
-		o = s.option(form.Value, 'weight', ('Weight'),
+		o = s.option(form.Value, 'weight', _('Weight'),
 			_('Acceptable values: 1-1000. Defaults to 1 if not set'));
 		o.datatype = 'range(1, 1000)';
 

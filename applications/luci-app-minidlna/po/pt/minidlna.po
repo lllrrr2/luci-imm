@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-07-09 23:09+0000\n"
+"PO-Revision-Date: 2026-05-15 10:43+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsminidlna/pt/>\n"
@@ -10,11 +10,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 2026.5.dev0\n"
 
 #: applications/luci-app-minidlna/htdocs/luci-static/resources/view/minidlna.js:51
 msgid "Advanced Settings"
-msgstr "Configurações avançadas"
+msgstr "Configurações Avançadas"
 
 #: applications/luci-app-minidlna/htdocs/luci-static/resources/view/minidlna.js:80
 msgid "Album art names"
@@ -159,7 +159,7 @@ msgstr ""
 
 #: applications/luci-app-minidlna/htdocs/luci-static/resources/view/minidlna.js:90
 msgid ""
-"Set this to enable inotify monitoring to automatically discover new files."
+"Set this to enable inotify monitoring to discover new files automatically."
 msgstr ""
 "Defina isto para permitir que o monitoramento inotify descubra novos "
 "ficheiros automaticamente."
@@ -248,16 +248,3 @@ msgstr "Estado do miniDLNA"
 #: applications/luci-app-minidlna/htdocs/luci-static/resources/view/minidlna.js:112
 msgid "miniSSDP socket"
 msgstr "Soquete do miniSSDP"
-
-#~ msgid "Log directory"
-#~ msgstr "Directório de Log"
-
-#~ msgid ""
-#~ "Set this if you would like to specify the directory where you want "
-#~ "MiniDLNA to store its log file."
-#~ msgstr ""
-#~ "Defina isto se quiser especificar o diretório onde quer que MiniDLNA "
-#~ "armazene o seu ficheiro de log."
-
-#~ msgid "Collecting data..."
-#~ msgstr "A recolher dados..."

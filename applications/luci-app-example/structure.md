@@ -9,6 +9,8 @@
 │               └── example
 │                   ├── form.js
 │                   ├── htmlview.js
+│                   ├── rpc-jsonmap-tablesection.js
+│                   ├── rpc-jsonmap-typedsection.js
 │                   └── rpc.js
 ├── Makefile
 ├── po
@@ -17,20 +19,18 @@
 ├── README.md
 └── root
     ├── etc
-    │   ├── luci.example.yaml
     │   └── uci-defaults
     │       └── 80_example
     └── usr
-        ├── libexec
-        │   └── rpcd
-        │       └── luci.example
         └── share
             ├── luci
             │   └── menu.d
             │       └── luci-app-example.json
             └── rpcd
-                └── acl.d
-                    └── luci-app-example.json
+                ├── acl.d
+                │   └── luci-app-example.json
+                └── ucode
+                    └── example.uc
 
 ```
 
@@ -42,7 +42,7 @@ For the rest of this documentation, `appname` is `example`.
 
 ## Root files
 
-At least one file must exist in `applications/luci-app-example` - a Makefile. This defines what license is to be applied to the code, and what packages are required for the package to be installed. In this example app, YAML is processed by the Lua code, so **lyaml** is marked as a dependency.
+At least one file must exist in `applications/luci-app-example` - a Makefile. This defines what license is to be applied to the code, and what packages are required for the package to be installed.
 
 A `README.md` file is also recommended. It should provide context on what the app does, and perhaps instructions on how to test things like RPC calls.
 
@@ -60,17 +60,13 @@ The JSON file that defines what APIs may be called is defined in `root/usr/share
 
 If ACL rights are not granted correctly, the web UI will show an error indicating "Access denied". Fix the ACL file, deploy it to the device/virtual machine, and restart `rpcd`.
 
-Note that there may be legacy UCI (luci-compat) grants ACL in place, permitting read and write for all applications to all UCI resources. This should not be taken as a reason to skip granting the correct ACLs in your application. To ensure your ACLs are correct, you can move `acl.d/luci-compat` out of the way and restart `rpcd`. Put the file back when you've finished testing, as other LuCI applications may depend on it.
-
 ## Additional files
 
-LuCI apps do not have to have any additional files such as Lua scripts or UCI default setup. However, here's how you deal with those if needed.
+LuCI apps do not have to have any additional files or UCI default setup. However, here's how you deal with those if needed.
 
 ### Installing additional files
 
-Any additional files needed by this application should be placed in `root/` using the directory tree that applies. This example application needs a RPCd script to be installed, so it places a file in `root/usr/libexec/rpcd/` and calls it `luci.example`. Scripts must have their execution bit set, and committed to the git repository with the bit set.
-
-This example application also installs a file in `/etc/` by putting it in `root/etc/luci.example.yaml`.
+Any additional files needed by this application should be placed in `root/` using the directory tree that applies. This example application needs a ucode RPCd script to be installed, so it places a file in `root/usr/share/rpcd/ucode` and called `example.uc`.
 
 The OpenWrt packaging system will install these files automatically.
 

@@ -8,7 +8,7 @@ return view.extend({
 	},
 
 	render: function() {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('nut_cgi', _('NUT CGI'),
 			_('Network UPS Tools CGI Configuration') + '<br />' +
@@ -32,15 +32,6 @@ return view.extend({
 
 		o = s.option(form.Value, 'displayname', _('Display name'));
 		o.optional = false;
-
-		s = m.section(form.TypedSection, 'upsset', _('Control UPS via CGI'));
-		s.addremove = false;
-		s.anonymous = true;
-		s.optional = false;
-
-		o = s.option(form.Flag, 'enable', _('Enable'));
-		o.optional = false;
-		o.default = false;
 
 		return m.render();
 	}

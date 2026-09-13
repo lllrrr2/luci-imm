@@ -25,7 +25,7 @@ return network.registerProtocol('modemmanager', {
 		return this._ubus('l3_device') || 'modemmanager-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'modemmanager';
 	},
 
@@ -83,7 +83,7 @@ return network.registerProtocol('modemmanager', {
 		o.value('mschapv2', 'MSCHAPv2');
 		o.value('eap', 'EAP');
 		o.value('', _('None'));
-		o.default = 'none';
+		o.default = '';
 
 		o = s.taboption('general', form.ListValue, 'allowedmode', _('Allowed network technology'),
 			_('Setting the allowed network technology.'));
@@ -125,21 +125,25 @@ return network.registerProtocol('modemmanager', {
 		o.depends('allowedmode','5g|4g|3g|2g');
 
 		o = s.taboption('general', form.Value, 'username', _('PAP/CHAP username'));
-		o.depends('auth', 'pap');
-		o.depends('auth', 'chap');
-		o.depends('auth', 'both');
+		o.depends({'allowedauth': 'pap', '!contains': true });
+		o.depends({'allowedauth': 'chap', '!contains': true });
+		o.depends({'allowedauth': 'mschap', '!contains': true });
+		o.depends({'allowedauth': 'mschapv2', '!contains': true });
+		o.depends({'allowedauth': 'eap', '!contains': true });
 
 		o = s.taboption('general', form.Value, 'password', _('PAP/CHAP password'));
-		o.depends('auth', 'pap');
-		o.depends('auth', 'chap');
-		o.depends('auth', 'both');
+		o.depends({'allowedauth': 'pap', '!contains': true });
+		o.depends({'allowedauth': 'chap', '!contains': true });
+		o.depends({'allowedauth': 'mschap', '!contains': true });
+		o.depends({'allowedauth': 'mschapv2', '!contains': true });
+		o.depends({'allowedauth': 'eap', '!contains': true });
 		o.password = true;
 
 		o = s.taboption('general', form.ListValue, 'iptype', _('IP Type'));
-		o.value('ipv4v6', _('IPv4/IPv6 (both - defaults to IPv4)'))
 		o.value('ipv4', _('IPv4 only'));
 		o.value('ipv6', _('IPv6 only'));
-		o.default = 'ipv4v6';
+		o.value('ipv4v6', _('IPv4/IPv6 (both)'));
+		o.default = 'ipv4';
 
 		o = s.taboption('advanced', form.Value, 'mtu', _('Override MTU'));
 		o.placeholder = dev ? (dev.getMTU() || '1500') : '1500';
@@ -183,27 +187,19 @@ return network.registerProtocol('modemmanager', {
 		o.default = '';
 
 		o = s.taboption('general', form.Value, 'init_username', _('Initial EPS Bearer Username'));
-		o.depends('init_allowedauth', 'pap');
-		o.depends('init_allowedauth', 'chap');
-		o.depends('init_allowedauth', 'mschap');
-		o.depends('init_allowedauth', 'mschapv2');
-		o.depends('init_allowedauth', 'eap');
+		o.depends({'init_epsbearer': 'custom', 'init_allowedauth': '.+'});
 		o.default = '';
 
 		o = s.taboption('general', form.Value, 'init_password', _('Initial EPS Bearer Password'));
-		o.depends('init_allowedauth', 'pap');
-		o.depends('init_allowedauth', 'chap');
-		o.depends('init_allowedauth', 'mschap');
-		o.depends('init_allowedauth', 'mschapv2');
-		o.depends('init_allowedauth', 'eap');
+		o.depends({'init_epsbearer': 'custom', 'init_allowedauth': '.+'});
 		o.default = '';
 		o.password = true;
 
 		o = s.taboption('general', form.ListValue, 'init_iptype', _('Initial EPS Bearer IP Type'));
 		o.depends('init_epsbearer', 'custom');
-		o.value('ipv4v6', _('IPv4/IPv6 (both - defaults to IPv4)'))
 		o.value('ipv4', _('IPv4 only'));
 		o.value('ipv6', _('IPv6 only'));
-		o.default = 'ipv4v6';
+		o.value('ipv4v6', _('IPv4/IPv6 (both)'));
+		o.default = 'ipv4';
 	}
 });

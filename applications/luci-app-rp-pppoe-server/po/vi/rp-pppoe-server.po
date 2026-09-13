@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-06-20 08:52+0000\n"
-"Last-Translator: Mashiro <michio.haiyaku@gmail.com>\n"
+"PO-Revision-Date: 2026-06-09 01:01+0000\n"
+"Last-Translator: Mytai20100 <mytai232746@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsrp-pppoe-server/vi/>\n"
 "Language: vi\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 2026.6\n"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:48
 msgid "Access Concentrator Name"
@@ -56,7 +56,7 @@ msgstr ""
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:25
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:25
 msgid "Enabled"
-msgstr ""
+msgstr "Đã bật"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:40
 msgid "First remote IP"
@@ -167,7 +167,7 @@ msgstr ""
 msgid "PPPoE Server Configuration"
 msgstr "Cấu hình máy chủ PPPoE"
 
-#: applications/luci-app-rp-pppoe-server/root/usr/share/luci/menu.d/luci-app-rp-pppoe-server.json:14
+#: applications/luci-app-rp-pppoe-server/root/usr/share/luci/menu.d/luci-app-rp-pppoe-server.json:13
 msgid "RP PPPoE Relay"
 msgstr ""
 
@@ -212,7 +212,7 @@ msgid "Synchronous PPP encapsulation"
 msgstr ""
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:89
-msgid "Tells the PPPoE server to randomly permute session numbers."
+msgid "Tells the PPPoE server to permute session numbers randomly."
 msgstr ""
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:61
@@ -228,22 +228,3 @@ msgstr "Đơn vị"
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:76
 msgid "Use Non-UCI Config"
 msgstr ""
-
-#~ msgid ""
-#~ "Instead of starting at beginning and going to end, randomize session "
-#~ "number"
-#~ msgstr ""
-#~ "Thay vì bắt đầu từ đầu và kết thúc ở cuối, ngẫu nhiên hóa số phiên "
-#~ "(session number)"
-
-#~ msgid "PPP unit number"
-#~ msgstr "Đơn vị PPP"
-
-#~ msgid "Sync"
-#~ msgstr "Đồng bộ"
-
-#~ msgid "Maximum sessions"
-#~ msgstr "Số phiên tối đa"
-
-#~ msgid "PPP offset"
-#~ msgstr "Khoảng cách (offset) PPP"

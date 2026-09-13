@@ -1,14 +1,22 @@
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2026-01-10 04:39+0000\n"
+"Last-Translator: Marco Otto <marco.otto@tuta.com>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/openwrt/"
+"luciapplicationsemail/nl/>\n"
 "Language: nl\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:248
 msgid ""
 "<a %s>DNS Block List (DNSBL)</a> used to block connections from known "
 "spammers."
 msgstr ""
+"<a %s>DNS Blokkeer Lijst (DNSBL)</a> gebruikt voor het blokkeren van "
+"verbindingen van bekende spammers."
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:139
 msgid ""
@@ -18,7 +26,7 @@ msgstr ""
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:51
 msgid "<b>You may receive spam so be careful</b>."
-msgstr ""
+msgstr "<b>Je ontvangt mogelijks spam, wees dus voorzichtig</b>."
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:226
 msgid "A file containing POP accounts and their credentials."
@@ -40,7 +48,7 @@ msgstr ""
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:25
 msgid "Advanced Settings"
-msgstr ""
+msgstr "Geavanceerde instellingen"
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:50
 msgid "Allow connections from the public internet."
@@ -65,7 +73,7 @@ msgstr ""
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:124
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:201
 msgid "CA certificate"
-msgstr ""
+msgstr "CA certificaat"
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:157
 msgid "Client authorization file"
@@ -119,7 +127,7 @@ msgstr ""
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:27
 msgid "Enabled"
-msgstr ""
+msgstr "Ingeschakeld"
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:281
 msgid "Extra command line options"
@@ -131,7 +139,7 @@ msgstr ""
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:12
 msgid "For further information <a %s>check the documentation</a>"
-msgstr ""
+msgstr "Voor meer informatie <a %s>lees de documentatie</a>"
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:252
 msgid ""

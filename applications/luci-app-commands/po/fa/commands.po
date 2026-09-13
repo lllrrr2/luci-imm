@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-04-13 18:37+0000\n"
-"Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
+"PO-Revision-Date: 2025-03-28 21:57+0000\n"
+"Last-Translator: KING APPS <kiperking1@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationscommands/fa/>\n"
 "Language: fa\n"
@@ -11,31 +11,35 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 
-#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:19
-msgid "A short textual description of the configured command"
-msgstr "شرح متنی کوتاه دستور پیکربندی شده"
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:20
+msgid "A short name for the configured command"
+msgstr ""
 
-#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:30
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:35
 msgid ""
 "Allow executing the command and downloading its output without prior "
 "authentication"
 msgstr "اجازه اجرای دستور و دانلود خروجی آن بدون احراز هویت قبلی را بدهید"
 
-#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:27
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:32
 msgid "Allow the user to provide additional command line arguments"
 msgstr "به کاربر اجازه دهید تا آرگومان های بیشتری در خط فرمان اضافه کند"
 
-#: applications/luci-app-commands/ucode/template/commands.ut:145
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:23
+msgid "An optional longer description to display on the execution page"
+msgstr ""
+
+#: applications/luci-app-commands/ucode/template/commands.ut:148
 msgid "Arguments:"
 msgstr "آرگومانها:"
 
-#: applications/luci-app-commands/ucode/template/commands.ut:163
+#: applications/luci-app-commands/ucode/template/commands.ut:166
 msgid "Collecting data..."
-msgstr "جمع آوری داده ها..."
+msgstr "دریافت داده..."
 
-#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:21
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:26
 msgid "Command"
 msgstr "فرمان"
 
@@ -47,7 +51,7 @@ msgstr "فرمان با موفقیت اجرا شد."
 msgid "Command exited with status code %d"
 msgstr "فرمان با کد وضعیت %d خارج شد"
 
-#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:21
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:26
 msgid "Command line to execute"
 msgstr "خط فرمان برای اجرا"
 
@@ -65,7 +69,7 @@ msgstr "پیکربندی کنید"
 msgid "Custom Commands"
 msgstr "فرمانهای سفارشی"
 
-#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:26
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:31
 msgid "Custom arguments"
 msgstr "آرگومان های سفارشی"
 
@@ -73,11 +77,11 @@ msgstr "آرگومان های سفارشی"
 msgid "Dashboard"
 msgstr "داشبورد"
 
-#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:18
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:22
 msgid "Description"
-msgstr "شرح"
+msgstr "جزئیات"
 
-#: applications/luci-app-commands/ucode/template/commands.ut:149
+#: applications/luci-app-commands/ucode/template/commands.ut:152
 msgid "Download"
 msgstr "بارگیری"
 
@@ -85,19 +89,23 @@ msgstr "بارگیری"
 msgid "Grant UCI access for luci-app-commands"
 msgstr "اعطای دسترسی به UCI برای luci-app-commands"
 
-#: applications/luci-app-commands/ucode/template/commands.ut:151
+#: applications/luci-app-commands/ucode/template/commands.ut:154
 msgid "Link"
 msgstr "پیوند"
 
 #: applications/luci-app-commands/ucode/template/commands.ut:41
 msgid "Loading"
-msgstr "در حال بارگذاری"
+msgstr "درحال بارگذاری"
 
-#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:29
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:19
+msgid "Name"
+msgstr ""
+
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:34
 msgid "Public access"
 msgstr "دسترسی عمومی"
 
-#: applications/luci-app-commands/ucode/template/commands.ut:148
+#: applications/luci-app-commands/ucode/template/commands.ut:151
 msgid "Run"
 msgstr "اجرا کن"
 
@@ -121,32 +129,5 @@ msgstr ""
 msgid "This section contains no values yet"
 msgstr "این بخش هنوز هیچ مقداری ندارد"
 
-#~ msgid "Binary data not displayed, download instead."
-#~ msgstr "داده های باینری نمایش داده نمی شوند، به جای آن دانلود کنید."
-
-#~ msgid "Code:"
-#~ msgstr "کد:"
-
-#~ msgid "Command failed"
-#~ msgstr "فرمان ناموفق بود"
-
-#~ msgid "Command successful"
-#~ msgstr "فرمان با موفقیت انجام شد"
-
-#~ msgid "Download execution result"
-#~ msgstr "دانلود نتیجه اجرا"
-
-#~ msgid "Failed to execute command!"
-#~ msgstr "فرمان اجرا نشد!"
-
-#~ msgid "Or display result"
-#~ msgstr "یا نمایش نتیجه"
-
-#~ msgid "Waiting for command to complete..."
-#~ msgstr "در انتظار تکمیل فرمان..."
-
-#~ msgid "Command exited with status code"
-#~ msgstr "Command exited with status code"
-
-#~ msgid "Command exited with status code "
-#~ msgstr "Command exited with status code "
+#~ msgid "A short textual description of the configured command"
+#~ msgstr "شرح متنی کوتاه دستور پیکربندی شده"

@@ -28,7 +28,7 @@ return network.registerProtocol('mbim', {
 		return this._ubus('l3_device') || 'mbim-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'umbim';
 	},
 
@@ -64,6 +64,7 @@ return network.registerProtocol('mbim', {
 
 		o = s.taboption('general', form.Value, 'apn', _('APN'));
 		o.validate = function(section_id, value) {
+			if (value == null || value == '') return true;
 			if (!/^[a-zA-Z0-9\-.]*[a-zA-Z0-9]$/.test(value))
 				return _('Invalid APN provided');
 

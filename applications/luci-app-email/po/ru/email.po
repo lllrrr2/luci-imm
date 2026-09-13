@@ -1,22 +1,23 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-01-19 12:38+0000\n"
-"Last-Translator: st7105 <st7105@gmail.com>\n"
+"PO-Revision-Date: 2026-08-25 15:03+0000\n"
+"Last-Translator: SnIPeRSnIPeR <snipersniper@users.noreply.hosted.weblate.org>"
+"\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsemail/ru/>\n"
 "Language: ru\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:248
 msgid ""
 "<a %s>DNS Block List (DNSBL)</a> used to block connections from known "
 "spammers."
 msgstr ""
-"<a %s>Список блокировки DNS (DNSBL)</a> используется для блокировки "
+"<a %s>Список блокировок DNS (DNSBL)</a> используется для блокировки "
 "соединений от известных спамеров."
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:139
@@ -33,11 +34,11 @@ msgstr "<b>Вы можете получить спам, поэтому будь�
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:226
 msgid "A file containing POP accounts and their credentials."
-msgstr "Файл, содержащий учетные записи POP и их учетные данные."
+msgstr "Файл, содержащий учётные записи POP и их учётные данные."
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:158
 msgid "A file that contains credentials for SMTP smarthost client."
-msgstr "Файл, содержащий учетные данные для клиента SMTP smarthost."
+msgstr "Файл, содержащий учётные данные для клиента SMTP smarthost."
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:253
 msgid ""
@@ -53,7 +54,7 @@ msgstr "Верификатор адресов"
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:25
 msgid "Advanced Settings"
-msgstr "Дополнительные настройки"
+msgstr "Расширенные настройки"
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:50
 msgid "Allow connections from the public internet."
@@ -61,7 +62,7 @@ msgstr "Разрешить подключения из публичной сет
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:49
 msgid "Allow remote clients"
-msgstr "Разрешить удаленные клиенты"
+msgstr "Разрешить удалённые клиенты"
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:59
 msgid "Anonymous"
@@ -124,11 +125,11 @@ msgstr "Включить клиент SMTP TLS"
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:90
 msgid "Enable TLS for server"
-msgstr "Включите TLS для сервера"
+msgstr "Включить TLS для сервера"
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:52
 msgid "Enable ports in firewall."
-msgstr "Включите порты в брандмауэре."
+msgstr "Включите порты в межсетевом экране."
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:27
 msgid "Enabled"
@@ -145,8 +146,8 @@ msgstr "Фильтр"
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:12
 msgid "For further information <a %s>check the documentation</a>"
 msgstr ""
-"Для получения дополнительной информации <a %s>ознакомьтесь с "
-"документацией</a>"
+"Для получения дополнительной информации <a %s>ознакомьтесь с документацией</"
+"a>"
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:252
 msgid ""
@@ -185,7 +186,7 @@ msgstr "Ручные параметры командной строки (уст�
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:30
 msgid "Mode"
-msgstr "Режим"
+msgstr "Режим работы"
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:237
 msgid ""
@@ -200,8 +201,8 @@ msgid ""
 "Outcoming mail by usually received on <em>587</em> or <em>465</em> (TLS "
 "only) but the <em>25</em> is also used often."
 msgstr ""
-"Исходящая почта обычно принимается на портах <em>587</em> или <em>465</em> ("
-"только с использованием TLS), но также часто используется порт <em>25</em>."
+"Исходящая почта обычно принимается на портах <em>587</em> или <em>465</em> "
+"(только с использованием TLS), но также часто используется порт <em>25</em>."
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:225
 msgid "POP Auth file"
@@ -234,7 +235,7 @@ msgstr ""
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:60
 msgid "Reduce the amount of information leaked to remote clients."
-msgstr "Сократите объем информации, передаваемой удаленным клиентам."
+msgstr "Сократите объём информации, передаваемой удалённым клиентам."
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:273
 msgid ""
@@ -335,14 +336,14 @@ msgstr "Указывает доменное имя сервера, которо�
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:282
 msgid "Specify additional arguments that should be passed to the EmailRelay."
 msgstr ""
-"Укажите дополнительные аргументы, которые должны быть переданы EmailRelay."
+"Укажите дополнительные аргументы, которые должны быть переданы E-MailRelay."
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:250
 msgid ""
 "Starts with the transport DNS server's address:port, a timeout in "
 "milliseconds, a rejection threshold and list of DNSBL servers."
 msgstr ""
-"Начинается с адреса транспортного DNS-сервера:порт, таймаута в "
+"Начинается с адреса транспортного DNS-сервера:порт, тайм-аута в "
 "миллисекундах, порога отклонения и списка DNSBL-серверов."
 
 #: applications/luci-app-email/htdocs/luci-static/resources/view/email/emailrelay.js:113

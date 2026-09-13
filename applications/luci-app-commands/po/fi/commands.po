@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-08-31 15:13+0000\n"
-"Last-Translator: Kieli Puoli <kielipuoli@gmail.com>\n"
+"PO-Revision-Date: 2025-07-24 15:20+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationscommands/fi/>\n"
 "Language: fi\n"
@@ -11,13 +11,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
-#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:19
-msgid "A short textual description of the configured command"
-msgstr "Määritetyn komennon lyhyt kuvaus"
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:20
+msgid "A short name for the configured command"
+msgstr ""
 
-#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:30
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:35
 msgid ""
 "Allow executing the command and downloading its output without prior "
 "authentication"
@@ -25,19 +25,23 @@ msgstr ""
 "Salli komennon suoritus ja sen tuloksen lataaminen ilman erillistä "
 "hyväksyntää"
 
-#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:27
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:32
 msgid "Allow the user to provide additional command line arguments"
 msgstr "Salli käyttäjän määritellä lisää komentoriviargumentteja"
 
-#: applications/luci-app-commands/ucode/template/commands.ut:145
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:23
+msgid "An optional longer description to display on the execution page"
+msgstr ""
+
+#: applications/luci-app-commands/ucode/template/commands.ut:148
 msgid "Arguments:"
 msgstr "Argumentit:"
 
-#: applications/luci-app-commands/ucode/template/commands.ut:163
+#: applications/luci-app-commands/ucode/template/commands.ut:166
 msgid "Collecting data..."
 msgstr "Kerätään tietoja..."
 
-#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:21
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:26
 msgid "Command"
 msgstr "Komento"
 
@@ -47,9 +51,9 @@ msgstr "Komento suoritettu onnistuneesti."
 
 #: applications/luci-app-commands/ucode/template/commands_public.ut:34
 msgid "Command exited with status code %d"
-msgstr ""
+msgstr "Komento suoritettu, lopputuloksena status-koodi: %d"
 
-#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:21
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:26
 msgid "Command line to execute"
 msgstr "Suoritettava komentorivi"
 
@@ -67,7 +71,7 @@ msgstr "Asetukset"
 msgid "Custom Commands"
 msgstr "Räätälöidyt komennot"
 
-#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:26
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:31
 msgid "Custom arguments"
 msgstr "Erilliset argumentit"
 
@@ -75,19 +79,19 @@ msgstr "Erilliset argumentit"
 msgid "Dashboard"
 msgstr "Kojelauta"
 
-#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:18
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:22
 msgid "Description"
 msgstr "Kuvaus"
 
-#: applications/luci-app-commands/ucode/template/commands.ut:149
+#: applications/luci-app-commands/ucode/template/commands.ut:152
 msgid "Download"
-msgstr "Lataus"
+msgstr "Lataa"
 
 #: applications/luci-app-commands/root/usr/share/rpcd/acl.d/luci-app-commands.json:3
 msgid "Grant UCI access for luci-app-commands"
 msgstr "Salli pääsy räätälöityjen komentojen asetuksiin"
 
-#: applications/luci-app-commands/ucode/template/commands.ut:151
+#: applications/luci-app-commands/ucode/template/commands.ut:154
 msgid "Link"
 msgstr "Linkki"
 
@@ -95,11 +99,15 @@ msgstr "Linkki"
 msgid "Loading"
 msgstr "Ladataan"
 
-#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:29
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:19
+msgid "Name"
+msgstr ""
+
+#: applications/luci-app-commands/htdocs/luci-static/resources/view/commands.js:34
 msgid "Public access"
 msgstr "Julkinen pääsy"
 
-#: applications/luci-app-commands/ucode/template/commands.ut:148
+#: applications/luci-app-commands/ucode/template/commands.ut:151
 msgid "Run"
 msgstr "Suorita"
 
@@ -123,32 +131,5 @@ msgstr ""
 msgid "This section contains no values yet"
 msgstr "Tässä osassa ei ole vielä arvoja"
 
-#~ msgid "Binary data not displayed, download instead."
-#~ msgstr "Binääridataa ei näytetä. Lataa se."
-
-#~ msgid "Code:"
-#~ msgstr "Koodi:"
-
-#~ msgid "Command failed"
-#~ msgstr "Komento epäonnistui"
-
-#~ msgid "Command successful"
-#~ msgstr "Komento onnistui"
-
-#~ msgid "Download execution result"
-#~ msgstr "Lataa suorituksen tulos"
-
-#~ msgid "Failed to execute command!"
-#~ msgstr "Komennon suorittaminen epäonnistui!"
-
-#~ msgid "Or display result"
-#~ msgstr "Tai näytä tulos"
-
-#~ msgid "Waiting for command to complete..."
-#~ msgstr "Odotetaan komennon suorittamisen päättymistä..."
-
-#~ msgid "Command exited with status code"
-#~ msgstr "Komento päättyi statuskoodiin"
-
-#~ msgid "Command exited with status code "
-#~ msgstr "Command exited with status code "
+#~ msgid "A short textual description of the configured command"
+#~ msgstr "Määritetyn komennon lyhyt kuvaus"

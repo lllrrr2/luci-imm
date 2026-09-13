@@ -8,39 +8,31 @@
 'require tools.widgets as widgets';
 
 function calculateNetwork(addr, mask) {
-	addr = validation.parseIPv4(String(addr));
+	const parsedAddr = validation.parseIPv4(String(addr));
+	if (parsedAddr == null) return null;
 
-	if (!isNaN(mask))
-		mask = validation.parseIPv4(network.prefixToMask(+mask));
-	else
-		mask = validation.parseIPv4(String(mask));
+	const parsedMask = !isNaN(mask)
+		? validation.parseIPv4(network.prefixToMask(+mask))
+		: validation.parseIPv4(String(mask));
+	if (parsedMask == null) return null;
 
-	if (addr == null || mask == null)
-		return null;
+	const networkAddr = parsedAddr.map((byte, i) => byte & (parsedMask[i] >>> 0 & 255));
 
-	return  [
-			addr[0] & (mask[0] >>> 0 & 255),
-			addr[1] & (mask[1] >>> 0 & 255),
-			addr[2] & (mask[2] >>> 0 & 255),
-			addr[3] & (mask[3] >>> 0 & 255)
-		].join('.') + '/' +
-		network.maskToPrefix(mask.join('.'));
+	return `${networkAddr.join('.')}/${network.maskToPrefix(parsedMask.join('.'))}`;
 }
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			network.getDevices(),
 			uci.load('libreswan'),
 		]);
 	},
 
-	render: function(data) {
-		var netDevs = data[0];
-		var m, s, o;
-		var proposals;
+	render([netDevs]) {
+		let m, s, o;
 
-		proposals = uci.sections('libreswan', 'crypto_proposal');
+		let proposals = uci.sections('libreswan', 'crypto_proposal');
 		if (proposals == '') {
 			ui.addNotification(null, E('p', _('Proposals must be configured for Tunnels')));
 			return;
@@ -53,6 +45,26 @@ return view.extend({
 		s.addremove = true;
 		s.nodedescription = false;
 		s.addbtntitle = _('Add Tunnel');
+
+		s.renderSectionAdd = function(extra_class) {
+			const el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments);
+			const nameEl = el.querySelector('.cbi-section-create-name');
+			ui.addValidator(nameEl, 'uciname', true, function(v) {
+				let sections = [
+					...uci.sections('libreswan', 'crypto_proposal'),
+					...uci.sections('libreswan', 'tunnel'),
+				];
+				
+				if (sections.find(function(s) {
+					return s['.name'] == v;
+				})) {
+					return _('This may not share the same name as other proposals or configured tunnels.');
+				}
+				if (v.length > 15) return _('Name length shall not exceed 15 characters');
+				return true;
+			}, 'blur', 'keyup');
+			return el;
+		};
 
 		o = s.tab('general', _('General'));
 		o = s.tab('authentication', _('Authentication'));
@@ -71,15 +83,14 @@ return view.extend({
 
 		o = s.taboption('general', form.Value, 'left', _('Left IP/Device'));
 		o.datatype = 'or(string, ipaddr)';
-		for (var i = 0; i < netDevs.length; i++) {
-			var addrs = netDevs[i].getIPAddrs();
-			for (var j = 0; j < addrs.length; j++) {
-				o.value(addrs[j].split('/')[0]);
-			}
-		}
-		for (var i = 0; i < netDevs.length; i++) {
-			o.value('%' + netDevs[i].device);
-		}
+		netDevs.forEach(netDev => {
+			netDev.getIPAddrs().forEach(addr => {
+				o.value(addr.split('/')[0]);
+			});
+		});
+		netDevs.forEach(netDev => {
+			o.value(`%${netDev.device}`);
+		});
 		o.value('%defaultroute');
 		o.optional = false;
 		o.depends({ 'left_interface' : '' });
@@ -102,12 +113,11 @@ return view.extend({
 
 		o = s.taboption('general', form.Value, 'leftsourceip', _('Local Source IP'));
 		o.datatype = 'ipaddr';
-		for (var i = 0; i < netDevs.length; i++) {
-			var addrs = netDevs[i].getIPAddrs();
-			for (var j = 0; j < addrs.length; j++) {
-				o.value(addrs[j].split('/')[0]);
-			}
-		}
+		netDevs.forEach(netDev => {
+			netDev.getIPAddrs().forEach(addr => {
+				o.value(addr.split('/')[0]);
+			});
+		});
 		o.optional = false;
 		o.modalonly = true;
 
@@ -118,10 +128,10 @@ return view.extend({
 
 		o = s.taboption('general', form.DynamicList, 'leftsubnets', _('Local Subnets'));
 		o.datatype = 'ipaddr';
-		for (var i = 0; i < netDevs.length; i++) {
-			var addrs = netDevs[i].getIPAddrs();
-			for (var j = 0; j < addrs.length; j++) {
-				var subnet = calculateNetwork(addrs[j].split('/')[0], addrs[j].split('/')[1]);
+		for (let nd of netDevs) {
+			const addrs = nd.getIPAddrs();
+			for (let ad of addrs) {
+				const subnet = calculateNetwork(ad.split('/')[0], ad.split('/')[1]);
 				if (subnet) {
 					o.value(subnet);
 				}
@@ -155,10 +165,17 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.MultiValue, 'ike', _('Phase1 Proposals'));
-		for (var i = 0; i < proposals.length; i++) {
-			o.value(proposals[i]['.name']);
+		for (let prop of proposals) {
+			o.value(prop['.name']);
 		}
 		o.modalonly = true;
+
+		function timevalidate(section_id, value) {
+			if (!/^[0-9]{1,3}[smhd]$/.test(value)) {
+				return _('Acceptable values are an integer followed by m, h, d');
+			}
+			return true;
+		}
 
 		o = s.taboption('advanced', form.Value, 'ikelifetime', _('IKE Life Time'), _('Acceptable values are an integer followed by m, h, d'));
 		o.default = '8h';
@@ -171,12 +188,7 @@ return view.extend({
 		o.value('24h', '24h');
 		o.modalonly = false;
 		o.modalonly = true;
-		o.validate = function(section_id, value) {
-			if (!/^[0-9]{1,3}[smhd]$/.test(value)) {
-				return _('Acceptable values are an integer followed by m, h, d');
-			}
-			return true;
-		}
+		o.validate = timevalidate;
 
 		o = s.taboption('advanced', form.Flag, 'rekey', _('Rekey'));
 		o.default = false;
@@ -193,12 +205,7 @@ return view.extend({
 		o.value('60m', '60m');
 		o.modalonly = false;
 		o.modalonly = true;
-		o.validate = function(section_id, value) {
-			if (!/^[0-9]{1,3}[smhd]$/.test(value)) {
-				return _('Acceptable values are an integer followed by m, h, d');
-			}
-			return true;
-		}
+		o.validate = timevalidate;
 
 		o = s.taboption('advanced', form.ListValue, 'dpdaction', _('DPD Action'));
 		o.default = 'restart';
@@ -225,8 +232,8 @@ return view.extend({
 		o.optional = false;
 
 		o = s.taboption('advanced', form.MultiValue, 'phase2alg', _('Phase2 Proposals'));
-		for (var i = 0; i < proposals.length; i++) {
-			o.value(proposals[i]['.name']);
+		for (let prop of proposals) {
+			o.value(prop['.name']);
 		}
 		o.modalonly = true;
 
@@ -237,7 +244,7 @@ return view.extend({
 		o.optional = true;
 		o.modalonly = true;
 
-		var interfaces = uci.sections('network', 'interface');
+		let interfaces = uci.sections('network', 'interface');
 		o = s.taboption('advanced', form.ListValue, 'interface', _('Tunnel Interface'),
 			_('Lists XFRM interfaces in format "ipsecN", N denotes ifid of xfrm interface') + '<br>' +
 			_('Lists VTI interfaces configured with ikey and okey'));
@@ -245,17 +252,17 @@ return view.extend({
 		o.rmempty = true;
 		o.modalonly = true;
 		o.value('');
-		for (var i = 0; i < interfaces.length; i++) {
-			if ((interfaces[i]['proto'] == "vti") && interfaces[i]['ikey'] && interfaces[i]['okey']) {
-				o.value(interfaces[i]['.name'], 'VTI - ' + interfaces[i]['.name']);
+		interfaces.forEach(iface => {
+			const { proto, ikey, okey, ifid, ['.name']: name } = iface;
+
+			if (proto === "vti" && ikey && okey) {
+				o.value(name, `VTI - ${name}`);
 			}
 
-			if ((interfaces[i]['proto'] == "xfrm")
-				&& interfaces[i]['ifid']
-				&& interfaces[i]['.name'].match('ipsec' + interfaces[i]['ifid'])) {
-				o.value(interfaces[i]['.name'], 'XFRM - ' + interfaces[i]['.name']);
+			if (proto === "xfrm" && ifid && name.match(`ipsec${ifid}`)) {
+				o.value(name, `XFRM - ${name}`);
 			}
-		}
+		});
 
 		o = s.taboption('advanced', form.Flag, 'update_peeraddr', _('Update Peer Address'),
 			_('Auto Update Peer Address of VTI interface'));

@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-02-01 22:49+0000\n"
-"Last-Translator: ButterflyOfFire <boffire@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-05-02 19:29+0000\n"
+"Last-Translator: sllk <sillhack@hotmail.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationssquid/fr/>\n"
 "Language: fr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: applications/luci-app-squid/htdocs/luci-static/resources/view/squid.js:50
 msgid "Advanced Settings"
@@ -17,15 +17,17 @@ msgstr "Paramètres avancés"
 #: applications/luci-app-squid/htdocs/luci-static/resources/view/squid.js:100
 msgid "Advanced settings grants you direct access to the configuration files."
 msgstr ""
+"Les paramètres avancés vous donnent un accès direct aux fichiers de "
+"configuration."
 
 #: applications/luci-app-squid/htdocs/luci-static/resources/view/squid.js:93
 msgid "Can only be set if Squid is compiled with the %s option"
-msgstr ""
+msgstr "Ne peut être activé que si Squid est compilé avec l'option %s"
 
 #: applications/luci-app-squid/htdocs/luci-static/resources/view/squid.js:52
 #: applications/luci-app-squid/htdocs/luci-static/resources/view/squid.js:106
 msgid "Config file"
-msgstr ""
+msgstr "Fichier de configuration"
 
 #: applications/luci-app-squid/htdocs/luci-static/resources/view/squid.js:86
 msgid "Coredump files directory"
@@ -33,7 +35,7 @@ msgstr "Répertoire des fichiers Coredump"
 
 #: applications/luci-app-squid/htdocs/luci-static/resources/view/squid.js:92
 msgid "Enable ICMP pinger"
-msgstr ""
+msgstr "Activer le ping ICMP"
 
 #: applications/luci-app-squid/htdocs/luci-static/resources/view/squid.js:17
 msgid "File must be located in directory /etc/squid"

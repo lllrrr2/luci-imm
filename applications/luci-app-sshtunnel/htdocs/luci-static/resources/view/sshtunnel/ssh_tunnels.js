@@ -6,14 +6,14 @@
 'require view';
 
 return view.extend({
-	load: function () {
+	load() {
 		return Promise.all([
 			uci.load('sshtunnel'),
 		]);
 	},
 
-	render: function (data) {
-		var m, s, o;
+	render() {
+		let m, s, o;
 
 		m = new form.Map('sshtunnel', _('SSH Tunnels'),
 			_('This configures <a %s>SSH Tunnels</a>.')
@@ -154,7 +154,7 @@ return view.extend({
 });
 
 function _addServerOption(s) {
-	var o = s.option(form.ListValue, 'server', _('Server'));
+	const o = s.option(form.ListValue, 'server', _('Server'));
 	o.datatype = 'uciname';
 	o.rmempty = false;
 	uci.sections('sshtunnel', 'server', function (s, sectionName) {

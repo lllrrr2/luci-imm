@@ -44,7 +44,10 @@ export function conntrack_list(callback) {
 		etcpr.close();
 	}
 
-	const nfct = open('/proc/net/nf_conntrack', 'r');
+	let nfct = open('/proc/net/nf_conntrack', 'r');
+	if (! nfct) {
+		nfct = popen('/usr/sbin/conntrack -L -o extended', 'r');
+	}
 	let connt;
 
 	if (nfct) {
@@ -145,13 +148,4 @@ export function init_enabled(name) {
 	}
 
 	return false;
-};
-
-export function init_action(name, action) {
-	const s = stat(`/etc/init.d/${basename(name)}`);
-
-	if (s?.type != 'file' || s?.user_exec == false)
-		return false;
-
-	return system(`env -i /etc/init.d/${basename(name)} ${action} >/dev/null`);
 };

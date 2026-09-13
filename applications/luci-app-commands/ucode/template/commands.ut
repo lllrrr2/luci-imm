@@ -28,7 +28,7 @@
 	` });
 -%}
 
-<script type="text/javascript">//<![CDATA[
+<script>
 	function command_run(ev, id)
 	{
 		var field = document.getElementById(id);
@@ -38,7 +38,7 @@
 		if (legend && output)
 		{
 			output.innerHTML =
-				'<img src="{{ resource }}/icons/loading.gif" alt="{{ _('Loading') }}" style="vertical-align:middle" /> ' +
+				'<img src="{{ resource }}/icons/loading.svg" alt="{{ _('Loading') }}" style="vertical-align:middle" /> ' +
 				_('Waiting for command to complete...')
 			;
 
@@ -113,7 +113,7 @@
 		ev.preventDefault();
 	}
 
-//]]></script>
+</script>
 
 {%
 	const commands = [];
@@ -141,6 +141,9 @@
 				<div class="commandbox">
 					<h3>{{ entityencode(command.name) }}</h3>
 					<p>{{ _('Command:') }} <code>{{ entityencode(command.command) }}</code></p>
+					{% if (command.description): %}
+						<p><em>{{ entityencode(command.description) }}</em></p>
+					{% endif %}
 					{% if (command.param == "1"): %}
 						<p>{{ _('Arguments:') }} <input type="text" id="{{ command['.name'] }}" /></p>
 					{% endif %}

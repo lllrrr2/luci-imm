@@ -1,18 +1,6 @@
 #!/bin/sh
 
-CONFIG=passwall
-LOG_FILE=/tmp/log/$CONFIG.log
-
-echolog() {
-	local d="$(date "+%Y-%m-%d %H:%M:%S")"
-	#echo -e "$d: $1"
-	echo -e "$d: $1" >> $LOG_FILE
-}
-
-config_n_get() {
-	local ret=$(uci -q get "${CONFIG}.${1}.${2}" 2>/dev/null)
-	echo "${ret:=$3}"
-}
+. /usr/share/passwall/utils.sh
 
 test_url() {
 	local url=$1
@@ -56,8 +44,8 @@ test_proxy() {
 url_test_node() {
 	result=0
 	local node_id=$1
-	local _type=$(echo $(config_n_get ${node_id} type nil) | tr 'A-Z' 'a-z')
-	[ "${_type}" != "nil" ] && {
+	local _type=$(echo $(config_n_get ${node_id} type) | tr 'A-Z' 'a-z')
+	[ -n "${_type}" ] && {
 		if [ "${_type}" == "socks" ]; then
 			local _address=$(config_n_get ${node_id} address)
 			local _port=$(config_n_get ${node_id} port)
@@ -68,48 +56,20 @@ url_test_node() {
 				[ -n "${_username}" ] && [ -n "${_password}" ] && curlx="socks5h://${_username}:${_password}@${_address}:${_port}"
 			}
 		else
-			local _tmp_port=$(/usr/share/${CONFIG}/app.sh get_new_port 61080 tcp)
-			/usr/share/${CONFIG}/app.sh run_socks flag="url_test_${node_id}" node=${node_id} bind=127.0.0.1 socks_port=${_tmp_port} config_file=url_test_${node_id}.json
+			local _tmp_port=$(get_new_port 48900 tcp,udp)
+			NO_REC_PROCESS=1 /usr/share/${CONFIG}/app.sh run_socks flag="url_test_${node_id}" node=${node_id} bind=127.0.0.1 socks_port=${_tmp_port} config_file=url_test_${node_id}.json
 			local curlx="socks5h://127.0.0.1:${_tmp_port}"
 		fi
-		sleep 1s
-		local chn_list=$(config_n_get @global[0] chn_list direct)
-		local probeUrl="https://www.google.com/generate_204"
-		[ "${chn_list}" = "proxy" ] && probeUrl="https://www.baidu.com"
-		result=$(curl --connect-timeout 3 -o /dev/null -I -skL -w "%{http_code}:%{time_appconnect}" -x $curlx "${probeUrl}")
-		pgrep -af "url_test_${node_id}" | awk '! /test\.sh/{print $1}' | xargs kill -9 >/dev/null 2>&1
-		rm -rf "/tmp/etc/${CONFIG}/url_test_${node_id}.json"
+		sleep 2s
+		local probeUrl=$(config_n_get @global_other[0] url_test_url https://www.google.com/generate_204)
+		result=$(curl --connect-timeout 3 --max-time 5 -o /dev/null -I -skL -w "%{http_code}:%{time_pretransfer}" -x ${curlx} "${probeUrl}")
+		# 结束 SS 插件进程
+		local pid_file="${TMP_PATH}/url_test_${node_id}_plugin.pid"
+		[ -s "$pid_file" ] && kill -9 "$(head -n 1 "$pid_file")" >/dev/null 2>&1
+		busybox pgrep -af "url_test_${node_id}" | awk '! /test\.sh/{print $1}' | xargs kill -9 >/dev/null 2>&1
+		rm -rf ${TMP_PATH}/*url_test_${node_id}*.*
 	}
 	echo $result
-}
-
-test_node() {
-	local node_id=$1
-	local _type=$(echo $(config_n_get ${node_id} type nil) | tr 'A-Z' 'a-z')
-	[ "${_type}" != "nil" ] && {
-		if [ "${_type}" == "socks" ]; then
-			local _address=$(config_n_get ${node_id} address)
-			local _port=$(config_n_get ${node_id} port)
-			[ -n "${_address}" ] && [ -n "${_port}" ] && {
-				local curlx="socks5h://${_address}:${_port}"
-				local _username=$(config_n_get ${node_id} username)
-				local _password=$(config_n_get ${node_id} password)
-				[ -n "${_username}" ] && [ -n "${_password}" ] && curlx="socks5h://${_username}:${_password}@${_address}:${_port}"
-			}
-		else
-			local _tmp_port=$(/usr/share/${CONFIG}/app.sh get_new_port 61080 tcp)
-			/usr/share/${CONFIG}/app.sh run_socks flag="test_node_${node_id}" node=${node_id} bind=127.0.0.1 socks_port=${_tmp_port} config_file=test_node_${node_id}.json
-			local curlx="socks5h://127.0.0.1:${_tmp_port}"
-		fi
-		sleep 1s
-		_proxy_status=$(test_url "https://www.google.com/generate_204" ${retry_num} ${connect_timeout} "-x $curlx")
-		pgrep -af "test_node_${node_id}" | awk '! /test\.sh/{print $1}' | xargs kill -9 >/dev/null 2>&1
-		rm -rf "/tmp/etc/${CONFIG}/test_node_${node_id}.json"
-		if [ "${_proxy_status}" -eq 200 ]; then
-			return 0
-		fi
-	}
-	return 1
 }
 
 arg1=$1

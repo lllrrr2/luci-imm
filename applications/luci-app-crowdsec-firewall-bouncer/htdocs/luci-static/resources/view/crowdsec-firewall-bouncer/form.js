@@ -5,11 +5,11 @@
 
 return view.extend({
 	render: function() {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('crowdsec', _('CrowdSec'),
-			_('Gain <a href="http://www.crowdsec.net">crowd-sourced</a> protection against malicious IPs. ' +
-			'Benefit from the most accurate CTI in the world.'));
+			_('Gain %s protection against malicious IPs.'.format('<a href="http://www.crowdsec.net">crowd-sourced</a>')) + '<br/>' +
+			_('Benefit from the most accurate CTI in the world.'));
 
 
 		s = m.section(form.TypedSection, 'bouncer', _('Bouncer'));

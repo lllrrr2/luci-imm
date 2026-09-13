@@ -6,7 +6,7 @@
 'require uci';
 'require view';
 
-var getCompileTimeOptions = rpc.declare({
+const getCompileTimeOptions = rpc.declare({
 	object: 'luci.squid',
 	method: 'getCompileTimeOptions',
 	expect: { options: [] }
@@ -38,7 +38,7 @@ return view.extend({
 		var { config_file, mime_table } = data[0];
 		var options = data[1];
 
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('squid', _('Squid'));
 
@@ -49,7 +49,7 @@ return view.extend({
 		s.tab('general', _('General Settings'));
 		s.tab('advanced', _('Advanced Settings'));
 
-		var o = s.taboption('general', form.Value, 'config_file', _('Config file'));
+		o = s.taboption('general', form.Value, 'config_file', _('Config file'));
 		o.datatype = 'string';
 		o.default = '/etc/squid/squid.conf';
 		o.validate = function(section_id, value) {
@@ -71,7 +71,7 @@ return view.extend({
 		o.datatype = 'string';
 		o.optional = true;
 
-		o = s.taboption('general', form.Value, 'ssl_db', _('SSL DB'));
+		o = s.taboption('general', form.Value, 'ssldb', _('SSL DB'));
 		o.datatype = 'string';
 		o.optional = true;
 

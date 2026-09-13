@@ -14,6 +14,31 @@ document.querySelector('head').appendChild(E('link', {
 }));
 
 /*
+	module-level file size set during render, read by observer
+*/
+let fileSize = 0;
+
+/*
+	button state helper
+*/
+function updateButtons() {
+	const enable = function (id) {
+		const btn = document.getElementById(id);
+		if (btn) {
+			btn.removeAttribute('disabled');
+		}
+	};
+	if (fileSize === 0) {
+		enable('btnCreate');
+		enable('btnUpload');
+	} else {
+		enable('btnDownload');
+		enable('btnClear');
+		enable('btnSave');
+	}
+}
+
+/*
 	observe DOM changes
 */
 const observer = new MutationObserver(function (mutations) {
@@ -29,17 +54,7 @@ const observer = new MutationObserver(function (mutations) {
 		labels.forEach(function (label) {
 			label.setAttribute("style", "font-weight: bold !important; color: #595 !important;");
 		})
-		L.resolveDefault(fs.stat('/etc/banip/banip.custom.feeds'), '').then(function (stat) {
-			const buttons = document.querySelectorAll('#btnClear, #btnCreate, #btnSave, #btnUpload, #btnDownload');
-			if (buttons[1] && buttons[2] && stat.size === 0) {
-				buttons[1].removeAttribute('disabled');
-				buttons[2].removeAttribute('disabled');
-			} else if (buttons[0] && buttons[3] && buttons[4] && stat.size > 0) {
-				buttons[0].removeAttribute('disabled');
-				buttons[3].removeAttribute('disabled');
-				buttons[4].removeAttribute('disabled');
-			}
-		});
+		updateButtons();
 	}
 });
 
@@ -58,30 +73,21 @@ observer.observe(targetNode, observerConfig);
 function handleEdit(ev) {
 	if (ev === 'upload') {
 		return ui.uploadFile('/etc/banip/banip.custom.feeds').then(function () {
-			L.resolveDefault(fs.read_direct('/etc/banip/banip.custom.feeds', 'json'), "").then(function (data) {
-				if (data) {
-					let dataLength = Object.keys(data).length || 0;
-					if (dataLength > 0) {
-						for (let i = 0; i < dataLength; i++) {
-							let feed = Object.keys(data)[i];
-							let descr = data[feed].descr;
-							if (feed && descr) {
-								continue;
-							}
-							fs.write('/etc/banip/banip.custom.feeds', null).then(function () {
-								ui.addNotification(null, E('p', _('Upload of the custom feed file failed.')), 'error');
-							});
-							return;
+			return L.resolveDefault(fs.read_direct('/etc/banip/banip.custom.feeds', 'json'), "").then(function (data) {
+				if (data && Object.keys(data).length > 0) {
+					for (let i = 0; i < Object.keys(data).length; i++) {
+						let feed = Object.keys(data)[i];
+						let descr = data[feed]?.descr;
+						if (feed && descr) {
+							continue;
 						}
-					} else {
-						fs.write('/etc/banip/banip.custom.feeds', null).then(function () {
+						return fs.write('/etc/banip/banip.custom.feeds', null).then(function () {
 							ui.addNotification(null, E('p', _('Upload of the custom feed file failed.')), 'error');
 						});
-						return;
 					}
 					location.reload();
 				} else {
-					fs.write('/etc/banip/banip.custom.feeds', null).then(function () {
+					return fs.write('/etc/banip/banip.custom.feeds', null).then(function () {
 						ui.addNotification(null, E('p', _('Upload of the custom feed file failed.')), 'error');
 					});
 				}
@@ -119,67 +125,74 @@ function handleEdit(ev) {
 			return ui.addNotification(null, E('p', _('Invalid input values, unable to save modifications.')), 'error');
 		}
 	}
-	let sumSubElements = [], exportJson;
+	/*
+		gather all input data and fall through from 'save'
+	*/
+	const exportObj = {};
 	const nodeKeys = document.querySelectorAll('[id^="widget.cbid.json"][id$="name"]');
-	for (let i = 0; i < nodeKeys.length; i++) {
-		let subElements = {};
-		let elements = document.querySelectorAll('[id^="widget.cbid.json.' + nodeKeys[i].id.split('.')[3] + '\."]');
-		for (const element of elements) {
-			let key = element.id.split('.')[4];
-			let value = element.value || "";
-			if (value === "") {
-				continue;
-			}
-			switch (key) {
-				case 'url_4':
-					subElements.url_4 = value;
-					break;
-				case 'rule_4':
-					subElements.rule_4 = value;
-					break;
-				case 'url_6':
-					subElements.url_6 = value;
-					break;
-				case 'rule_6':
-					subElements.rule_6 = value;
-					break;
-				case 'descr':
-					subElements.descr = value;
-					break;
-				case 'flag':
-					subElements.flag = value;
-					break;
+	for (const keyNode of nodeKeys) {
+		const keyValue = keyNode.value?.trim();
+		if (!keyValue) continue;
+		const idParts = keyNode.id.split(".");
+		const ruleId = idParts[3];
+		if (!ruleId) continue;
+		const selector =
+			`[id^="widget.cbid.json.${ruleId}."], ` +
+			`[id^="cbid.json.${ruleId}.rule"]`;
+		const elements = document.querySelectorAll(selector);
+		const sub = {};
+		for (const el of elements) {
+			const parts = el.id.split(".");
+			const key = parts[parts.length - 1];
+			const value = el.value?.trim();
+			if (!value) continue;
+			if (["url_4", "url_6", "rule", "chain", "descr", "flag"].includes(key)) {
+				sub[key] = value;
 			}
 		}
-		if (nodeKeys[i].value !== "" && subElements.descr !== "") {
-			sumSubElements.push(nodeKeys[i].value, subElements);
+		/* require at least descr and rule to produce a valid feed entry */
+		if (sub.descr && sub.rule && (sub.url_4 || sub.url_6)) {
+			exportObj[keyValue] = sub;
 		}
 	}
-	if (sumSubElements.length > 0) {
-		exportJson = JSON.stringify(sumSubElements).replace(/^\[/, '{\n').replace(/\}]$/, '\n\t}\n}\n').replace(/,{"/g, ':{\n\t"').replace(/"},"/g, '"\n\t},\n"').replace(/","/g, '",\n\t"');
-	}
-	return fs.write('/etc/banip/banip.custom.feeds', exportJson).then(function () {
-		location.reload();
-	});
+	/*
+		save to file and reload
+	*/
+	const exportJson = JSON.stringify(exportObj, null, 4);
+	return fs.write('/etc/banip/banip.custom.feeds', exportJson)
+		.then(() => location.reload());
 }
 
 return view.extend({
 	load: function () {
-		return L.resolveDefault(fs.read_direct('/etc/banip/banip.custom.feeds', 'json'), "");
+		return L.resolveDefault(fs.stat('/etc/banip/banip.custom.feeds'), null)
+			.then(function (stat) {
+				if (!stat) {
+					return fs.write('/etc/banip/banip.custom.feeds', "").then(function () {
+						return { size: 0, data: null };
+					});
+				}
+				return L.resolveDefault(fs.read_direct('/etc/banip/banip.custom.feeds', 'json'), "")
+					.then(function (data) {
+						return { size: stat.size, data: data };
+					});
+			});
 	},
 
-	render: function (data) {
-		let m, s, o, feed, url_4, url_6, rule_4, rule_6, descr, flag;
+	render: function (result) {
+		let m, s, o, feed, url_4, url_6, rule, chain, descr, flag;
+		const data = result.data;
+		fileSize = result.size;
 
-		m = new form.JSONMap(data, _('Custom Feed Editor'), _('With this editor you can upload your local custom feed file or fill up an initial one (a 1:1 copy of the version shipped with the package). \
+		m = new form.JSONMap(data, null, _('With this editor you can upload your local custom feed file or fill up an initial one (a 1:1 copy of the version shipped with the package). \
 			The file is located at \'/etc/banip/banip.custom.feeds\'. \
 			Then you can edit this file, delete entries, add new ones or make a local backup. To go back to the maintainers version just clear the custom feed file.'));
 		for (let i = 0; i < Object.keys(m.data.data).length; i++) {
 			feed = Object.keys(m.data.data)[i];
 			url_4 = m.data.data[feed].url_4;
-			rule_4 = m.data.data[feed].rule_4;
 			url_6 = m.data.data[feed].url_6;
-			rule_6 = m.data.data[feed].rule_6;
+			rule = m.data.data[feed].rule;
+			chain = m.data.data[feed].chain;
 			descr = m.data.data[feed].descr;
 			flag = m.data.data[feed].flag;
 
@@ -205,29 +218,40 @@ return view.extend({
 				if (!value) {
 					return true;
 				}
-				if (!value.match(/^(http:\/\/|https:\/\/)[A-Za-z0-9\/\.\-\?\&\+_@%=:~#]+$/)) {
+				if (!value.match(/^https?:\/\/[A-Za-z0-9[\]/.?&+_@%=:~#-]+$/)) {
 					return _('Protocol/URL format not supported');
 				}
 				return true;
 			}
-
-			o = s.option(form.Value, 'rule_4', _('Rulev4'));
 
 			o = s.option(form.Value, 'url_6', _('URLv6'));
 			o.validate = function (section_id, value) {
 				if (!value) {
 					return true;
 				}
-				if (!value.match(/^(http:\/\/|https:\/\/)[A-Za-z0-9\/\.\-\?\&\+_@%=:~#]+$/)) {
+				if (!value.match(/^https?:\/\/[A-Za-z0-9[\]/.?&+_@%=:~#-]+$/)) {
 					return _('Protocol/URL format not supported');
 				}
 				return true;
 			}
 
-			o = s.option(form.Value, 'rule_6', _('Rulev6'));
+			o = s.option(form.Value, 'rule', _('Rule'));
+			o.value('feed 1', _('<IP-Address>'));
+			o.value('feed 1 ,', _('<IP-Address><CSV-Separator>'));
+			o.value('feed 13', _('<IP-Address><Space><Netmask>'));
+			o.value('feed 4 "', _('<JSON Lines><IP-Address><JSON Lines>'));
+			o.value('suricata 1', _('<Suricata Syntax>'));
+			o.optional = true;
+			o.rmempty = true;
+
+			o = s.option(form.ListValue, 'chain', _('Chain'));
+			o.value('in', _('Inbound'));
+			o.value('out', _('Outbound'));
+			o.value('inout', _('Inbound & Outbound'));
+			o.default = 'in';
 
 			o = s.option(form.Value, 'descr', _('Description'));
-			o.datatype = 'and(minlength(3),maxlength(30))';
+			o.datatype = 'and(minlength(5),maxlength(30))';
 			o.validate = function (section_id, value) {
 				if (!value) {
 					return _('Empty field not allowed');
@@ -240,7 +264,7 @@ return view.extend({
 				if (!value) {
 					return true;
 				}
-				if (!value.match(/^(\bgz\b|\btcp\b|\budp\b|\b[0-9\-]+\b| )*$/)) {
+				if (!value.match(/^(\bgz\b|\btcp\b|\budp\b|\b[0-9-]+\b| )*$/)) {
 					return _('Flag not supported');
 				}
 				return true;
@@ -249,52 +273,52 @@ return view.extend({
 
 		s = m.section(form.NamedSection, 'global');
 		s.render = L.bind(function () {
-			return E('div', { class: 'right' }, [
+			return E('div', { 'class': 'cbi-page-actions' }, [
 				E('button', {
-					'class': 'btn cbi-button cbi-button-action',
+					'class': 'btn cbi-button cbi-button-action important',
+					'style': 'float:none;margin-right:.4em;',
 					'id': 'btnDownload',
 					'disabled': 'disabled',
 					'click': ui.createHandlerFn(this, function () {
 						return handleEdit('download');
 					})
-				}, [_('Download Custom Feeds')]),
-				'\xa0',
+				}, [_('Download')]),
 				E('button', {
-					'class': 'btn cbi-button cbi-button-action',
+					'class': 'btn cbi-button cbi-button-action important',
+					'style': 'float:none;margin-right:.4em;',
 					'id': 'btnUpload',
 					'disabled': 'disabled',
 					'click': ui.createHandlerFn(this, function () {
 						return handleEdit('upload');
 					})
-				}, [_('Upload Custom Feeds')]),
-				'\xa0',
+				}, [_('Upload')]),
 				E('button', {
 					'class': 'btn cbi-button cbi-button-action important',
+					'style': 'float:none;margin-right:.4em;',
 					'id': 'btnCreate',
 					'disabled': 'disabled',
 					'click': ui.createHandlerFn(this, function () {
 						return handleEdit('create');
 					})
-				}, [_('Fill Custom Feeds')]),
-				'\xa0',
+				}, [_('Fill')]),
 				E('button', {
 					'class': 'btn cbi-button cbi-button-negative important',
+					'style': 'float:none;margin-right:.4em;',
 					'id': 'btnClear',
 					'disabled': 'disabled',
 					'click': ui.createHandlerFn(this, function () {
 						return handleEdit('clear');
 					})
-				}, [_('Clear Custom Feeds')]),
-				'\xa0',
+				}, [_('Clear')]),
 				E('button', {
 					'class': 'btn cbi-button cbi-button-positive important',
+					'style': 'float:none',
 					'id': 'btnSave',
 					'disabled': 'disabled',
 					'click': ui.createHandlerFn(this, function () {
 						return handleEdit('save');
 					})
-				}, [_('Save Custom Feeds')]),
-				'\xa0'
+				}, [_('Save')]),
 			])
 		});
 		return m.render();
